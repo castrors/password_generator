@@ -1,6 +1,6 @@
 # Password Generator
 
-![app gif](https://github.com/castrors/password_generator/blob/master/assets/password_generator.gif)
+![app gif](https://github.com/castrors/password_generator/blob/master/assets/generate_password.gif)
 
 **Tier:** 2-Intermediate
 
