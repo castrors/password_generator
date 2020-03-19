@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:password_generator/colors.dart';
+import 'package:password_generator/models/password_model.dart';
 import 'package:password_generator/rounded_container.dart';
+import 'package:provider/provider.dart';
 
 class PasswordGeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var passwordModel = Provider.of<PasswordModel>(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -28,7 +31,7 @@ class PasswordGeneratorPage extends StatelessWidget {
               ),
               RoundedContainer(
                 height: 72,
-                child: Text('cDSVKctQx71hCKnu',
+                child: Text(passwordModel.generatedPassword,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 28,
@@ -38,7 +41,7 @@ class PasswordGeneratorPage extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                'LENGTH: 16',
+                'LENGTH: ${passwordModel.length}',
                 style: TextStyle(color: hintColor),
               ),
               SizedBox(
@@ -57,8 +60,10 @@ class PasswordGeneratorPage extends StatelessWidget {
                     ),
                     Expanded(
                       child: Slider(
-                        onChanged: (value) {},
-                        value: 16,
+                        onChanged: (value) {
+                          passwordModel.length = value.toInt();
+                        },
+                        value: passwordModel.length.toDouble(),
                         max: 32,
                         min: 4,
                       ),
@@ -83,30 +88,38 @@ class PasswordGeneratorPage extends StatelessWidget {
               ),
               RoundedContainer(
                 child: SwitchListTile(
-                  onChanged: (value) {},
                   title: Text('Include uppercase letters'),
-                  value: true,
+                  value: passwordModel.includeUppercaseLetters,
+                  onChanged: (value) {
+                    passwordModel.includeUppercaseLetters = value;
+                  },
                 ),
               ),
               RoundedContainer(
                 child: SwitchListTile(
-                  onChanged: (value) {},
                   title: Text('Include lowercase letters'),
-                  value: false,
+                  value: passwordModel.includeLowercaseLetters,
+                  onChanged: (value) {
+                    passwordModel.includeLowercaseLetters = value;
+                  },
                 ),
               ),
               RoundedContainer(
                 child: SwitchListTile(
-                  onChanged: (value) {},
                   title: Text('Include numbers'),
-                  value: true,
+                  value: passwordModel.includeNumbers,
+                  onChanged: (value) {
+                    passwordModel.includeNumbers = value;
+                  },
                 ),
               ),
               RoundedContainer(
                 child: SwitchListTile(
-                  onChanged: (value) {},
                   title: Text('Include symbols'),
-                  value: false,
+                  value: passwordModel.includeSymbols,
+                  onChanged: (value) {
+                    passwordModel.includeSymbols = value;
+                  },
                 ),
               ),
               Expanded(
@@ -117,7 +130,9 @@ class PasswordGeneratorPage extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: RaisedButton(
                       child: Text('GENERATE PASSWORD'),
-                      onPressed: () {},
+                      onPressed: () {
+                        passwordModel.generate();
+                      },
                     ),
                   ),
                 ),
