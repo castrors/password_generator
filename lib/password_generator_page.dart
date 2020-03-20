@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:password_generator/colors.dart';
 import 'package:password_generator/models/password_model.dart';
 import 'package:password_generator/rounded_container.dart';
 import 'package:provider/provider.dart';
+import 'package:toast/toast.dart';
 
 class PasswordGeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var passwordModel = Provider.of<PasswordModel>(context);
+    passwordModel.generate();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -31,11 +34,30 @@ class PasswordGeneratorPage extends StatelessWidget {
               ),
               RoundedContainer(
                 height: 72,
-                child: Text(passwordModel.generatedPassword,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 28,
-                    )),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        passwordModel.generatedPassword,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 28,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.content_copy),
+                      onPressed: () {
+                        Clipboard.setData(
+                          ClipboardData(
+                            text: passwordModel.generatedPassword,
+                          ),
+                        );
+                        Toast.show('Password copied to the clipboard!', context);
+                      },
+                    )
+                  ],
+                ),
               ),
               SizedBox(
                 height: 20,
