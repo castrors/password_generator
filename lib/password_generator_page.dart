@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_generator/colors.dart';
-import 'package:password_generator/models/password_model.dart';
+import 'package:password_generator/models/password_input_data.dart';
 import 'package:password_generator/rounded_container.dart';
-import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
-class PasswordGeneratorPage extends StatelessWidget {
+import 'bloc/password_bloc.dart';
+
+class PasswordGeneratorPage extends StatefulWidget {
+  @override
+  _PasswordGeneratorPageState createState() => _PasswordGeneratorPageState();
+}
+
+class _PasswordGeneratorPageState extends State<PasswordGeneratorPage> {
+  var _length;
+  var _includeUppercaseLetters;
+  var _includeLowercaseLetters;
+  var _includeNumbers;
+  var _includeSymbols;
+
+  @override
+  void initState() {
+    _length = 16;
+    _includeUppercaseLetters = true;
+    _includeLowercaseLetters = true;
+    _includeNumbers = true;
+    _includeSymbols = true;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    var passwordModel = Provider.of<PasswordModel>(context);
-    passwordModel.generate();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -34,36 +55,45 @@ class PasswordGeneratorPage extends StatelessWidget {
               ),
               RoundedContainer(
                 height: 72,
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        passwordModel.generatedPassword,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 28,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.content_copy),
-                      onPressed: () {
-                        Clipboard.setData(
-                          ClipboardData(
-                            text: passwordModel.generatedPassword,
+                child: BlocBuilder<PasswordBloc, PasswordState>(
+                  builder: (context, state) {
+                    if (state is PasswordGenerated) {
+                      return Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              state.password,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 28,
+                              ),
+                            ),
                           ),
-                        );
-                        Toast.show('Password copied to the clipboard!', context);
-                      },
-                    )
-                  ],
+                          IconButton(
+                            icon: Icon(Icons.content_copy),
+                            onPressed: () {
+                              Clipboard.setData(
+                                ClipboardData(
+                                  text: state.password,
+                                ),
+                              );
+                              Toast.show(
+                                  'Password copied to the clipboard!', context);
+                            },
+                          )
+                        ],
+                      );
+                    } else {
+                      return Text('');
+                    }
+                  },
                 ),
               ),
               SizedBox(
                 height: 20,
               ),
               Text(
-                'LENGTH: ${passwordModel.length}',
+                'LENGTH: $_length',
                 style: TextStyle(color: hintColor),
               ),
               SizedBox(
@@ -83,9 +113,11 @@ class PasswordGeneratorPage extends StatelessWidget {
                     Expanded(
                       child: Slider(
                         onChanged: (value) {
-                          passwordModel.length = value.toInt();
+                          setState(() {
+                            _length = value.toInt();
+                          });
                         },
-                        value: passwordModel.length.toDouble(),
+                        value: _length.toDouble(),
                         max: 32,
                         min: 4,
                       ),
@@ -111,36 +143,44 @@ class PasswordGeneratorPage extends StatelessWidget {
               RoundedContainer(
                 child: SwitchListTile(
                   title: Text('Include uppercase letters'),
-                  value: passwordModel.includeUppercaseLetters,
+                  value: _includeUppercaseLetters,
                   onChanged: (value) {
-                    passwordModel.includeUppercaseLetters = value;
+                    setState(() {
+                      _includeUppercaseLetters = value;
+                    });
                   },
                 ),
               ),
               RoundedContainer(
                 child: SwitchListTile(
                   title: Text('Include lowercase letters'),
-                  value: passwordModel.includeLowercaseLetters,
+                  value: _includeLowercaseLetters,
                   onChanged: (value) {
-                    passwordModel.includeLowercaseLetters = value;
+                    setState(() {
+                      _includeLowercaseLetters = value;
+                    });
                   },
                 ),
               ),
               RoundedContainer(
                 child: SwitchListTile(
                   title: Text('Include numbers'),
-                  value: passwordModel.includeNumbers,
+                  value: _includeNumbers,
                   onChanged: (value) {
-                    passwordModel.includeNumbers = value;
+                    setState(() {
+                      _includeNumbers = value;
+                    });
                   },
                 ),
               ),
               RoundedContainer(
                 child: SwitchListTile(
                   title: Text('Include symbols'),
-                  value: passwordModel.includeSymbols,
+                  value: _includeSymbols,
                   onChanged: (value) {
-                    passwordModel.includeSymbols = value;
+                    setState(() {
+                      _includeSymbols = value;
+                    });
                   },
                 ),
               ),
@@ -153,7 +193,17 @@ class PasswordGeneratorPage extends StatelessWidget {
                     child: RaisedButton(
                       child: Text('GENERATE PASSWORD'),
                       onPressed: () {
-                        passwordModel.generate();
+                        BlocProvider.of<PasswordBloc>(context).add(
+                          PerformGeneration(
+                            input: PasswordInputData(
+                              length: _length,
+                              includeLowercaseLetters: _includeLowercaseLetters,
+                              includeNumbers: _includeNumbers,
+                              includeUppercaseLetters: _includeUppercaseLetters,
+                              includeSymbols: _includeSymbols,
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ),
