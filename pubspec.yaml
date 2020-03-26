@@ -16,8 +16,9 @@ dependencies:
   toast: ^0.1.5
 
 dev_dependencies:
-  flutter_test:
+  flutter_driver:
     sdk: flutter
+  test: any
 
 
 flutter:  

@@ -10,7 +10,6 @@ class PasswordGeneratorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var passwordModel = Provider.of<PasswordModel>(context);
-    passwordModel.generate();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -39,6 +38,7 @@ class PasswordGeneratorPage extends StatelessWidget {
                     Expanded(
                       child: Text(
                         passwordModel.generatedPassword,
+                        key: Key('generated_password'),
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 28,
@@ -151,6 +151,7 @@ class PasswordGeneratorPage extends StatelessWidget {
                     height: 52,
                     width: MediaQuery.of(context).size.width,
                     child: RaisedButton(
+                      key: Key('generate'),
                       child: Text('GENERATE PASSWORD'),
                       onPressed: () {
                         passwordModel.generate();
