@@ -43,11 +43,11 @@ class PasswordModel extends ChangeNotifier {
 
   void generate() {
     _generatedPassword = PasswordGenerator.generate(
-        _length,
-        _includeLowercaseLetters,
-        _includeUppercaseLetters,
-        _includeNumbers,
-        _includeSymbols);
+        length: _length,
+        lower: _includeLowercaseLetters,
+        upper: _includeUppercaseLetters,
+        number: _includeNumbers,
+        symbol: _includeSymbols);
     notifyListeners();
   }
 }

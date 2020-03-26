@@ -2,7 +2,7 @@ import 'dart:math';
 
 class PasswordGenerator {
   static String generate(
-      int length, bool lower, bool upper, bool number, bool symbol) {
+      {int length, bool lower, bool upper, bool number, bool symbol}) {
     var password = '';
 
     if (lower) {
