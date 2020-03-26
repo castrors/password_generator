@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:password_generator/widgets/custom_button.dart';
 
 void main() {
-  testWidgets('MyWidget has a title and message', (WidgetTester tester) async {
+  testWidgets('Custom Button enabled and with text GENERATE PASSWORD', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
