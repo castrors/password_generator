@@ -41,6 +41,12 @@ class PasswordModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool get shouldEnableButton =>
+      _includeUppercaseLetters ||
+      _includeLowercaseLetters ||
+      _includeNumbers ||
+      _includeSymbols;
+
   void generate() {
     _generatedPassword = PasswordGenerator.generate(
         length: _length,

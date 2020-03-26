@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:password_generator/colors.dart';
 import 'package:password_generator/models/password_model.dart';
 import 'package:password_generator/rounded_container.dart';
+import 'package:password_generator/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
@@ -53,7 +54,8 @@ class PasswordGeneratorPage extends StatelessWidget {
                             text: passwordModel.generatedPassword,
                           ),
                         );
-                        Toast.show('Password copied to the clipboard!', context);
+                        Toast.show(
+                            'Password copied to the clipboard!', context);
                       },
                     )
                   ],
@@ -150,10 +152,11 @@ class PasswordGeneratorPage extends StatelessWidget {
                   child: SizedBox(
                     height: 52,
                     width: MediaQuery.of(context).size.width,
-                    child: RaisedButton(
-                      key: Key('generate'),
-                      child: Text('GENERATE PASSWORD'),
-                      onPressed: () {
+                    child: CustomButton(
+                      buttonKey: Key('generate'),
+                      text: 'GENERATE PASSWORD',
+                      isEnabled: passwordModel.shouldEnableButton,
+                      onTap: () {
                         passwordModel.generate();
                       },
                     ),
