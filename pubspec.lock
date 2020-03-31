@@ -252,6 +252,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.8"
+  ozzie:
+    dependency: "direct dev"
+    description:
+      name: ozzie
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.3"
   package_config:
     dependency: transitive
     description:

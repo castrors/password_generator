@@ -21,6 +21,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   test: any
+  ozzie: 2.2.3
 
 
 flutter:  

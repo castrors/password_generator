@@ -84,6 +84,7 @@ class PasswordGeneratorPage extends StatelessWidget {
                     ),
                     Expanded(
                       child: Slider(
+                        key: Key('slider'),
                         onChanged: (value) {
                           passwordModel.length = value.toInt();
                         },
